@@ -1,0 +1,75 @@
+import csv
+
+# Student Records
+students = [
+    {"RollNo": "101", "Name": "Anitha", "Department": "CSE", "Mark": 86},
+    {"RollNo": "102", "Name": "Bala", "Department": "CSE", "Mark": 91},
+    {"RollNo": "103", "Name": "Chitra", "Department": "ECE", "Mark": 78}
+]
+
+# Tuple example
+course = ("Python", 4)
+print("Course Tuple:", course)
+
+# Add new student
+roll = input("Enter Roll No: ")
+
+if any(s["RollNo"] == roll for s in students):
+    print("Roll Number already exists!")
+else:
+    name = input("Enter Name: ")
+    dept = input("Enter Department: ")
+    mark = float(input("Enter Mark: "))
+
+    students.append({
+        "RollNo": roll,
+        "Name": name,
+        "Department": dept,
+        "Mark": mark
+    })
+
+    print("Student added successfully!")
+
+# Write text file
+with open("students.txt", "w") as file:
+    for student in students:
+        file.write(str(student) + "\n")
+
+# Write CSV file
+with open("students.csv", "w", newline="") as file:
+    fields = ["RollNo", "Name", "Department", "Mark"]
+
+    writer = csv.DictWriter(file, fieldnames=fields)
+    writer.writeheader()
+    writer.writerows(students)
+
+# Read CSV file
+print("\n--- Records from CSV ---")
+
+with open("students.csv", "r") as file:
+    reader = csv.DictReader(file)
+
+    for row in reader:
+        print(row["RollNo"], row["Name"],
+              row["Department"], row["Mark"])
+
+# Additional analysis
+total_marks = sum(s["Mark"] for s in students)
+average = total_marks / len(students)
+
+print("\nTotal Students:", len(students))
+print("Average Mark:", round(average, 2))
+
+# Search student
+search = input("\nEnter Roll No to search: ")
+
+found = False
+
+for student in students:
+    if student["RollNo"] == search:
+        print("Student Found:", student)
+        found = True
+        break
+
+if not found:
+    print("Student not found!")
